@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import scipy.io as sio
 import numpy as np
 import math
+from truss import Truss 
+
 EPSILON = 1.0E-7
 TRUSS_COST_P_IN = 1
 JOINT_COST = 10
@@ -55,118 +57,7 @@ def generate_validation_data():
                 "Y": Ym,
                 "L": Lm}
     sio.savemat("validationproblem.mat",data_dict)
-def generate_design_one():
-    # Data file will have C,Sx,Sy,X,Y,L
-    Cm = np.array([
-        #1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H truss/joint 
-        [1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0], # A
-        [1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0], # B
-        [0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0], # C
-        [0,0,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0], # D
-        [0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0], # E
-        [0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0], # F
-        [0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0], # G
-        [0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,1,0], # H
-        [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1], # I
-        [0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1]  # J
-    ])
-    Sx = np.array([
-        #Ax,Ay,Hy
-        [1,0,0], # A
-        [0,0,0], # B
-        [0,0,0], # C
-        [0,0,0], # D
-        [0,0,0], # E
-        [0,0,0], # F
-        [0,0,0], # G
-        [0,0,0], # H
-        [0,0,0], # I
-        [0,0,0] # J
-    ])
-    Sy = np.array([
-        #Ax,Ay,Hy
-        [0,1,0], # A
-        [0,0,0], # B
-        [0,0,0], # C
-        [0,0,0], # D
-        [0,0,0], # E
-        [0,0,0], # F
-        [0,0,0], # G
-        [0,0,0], # H
-        [0,0,0], # I
-        [0,0,1] # J
-    ])
-    # assuming origin at point A 
-    #     A, B, C, D, E, F, G, H, I, J
-    Xm = [00,10,20,30,40,50,10,20,30,40]
-    Ym = [00,00,00,00,00,00, 8, 8, 8, 8]
-    #     A,B,C,D,E,F,G,H,I,J
-    Lm = [0,0,0,0,0,0,0,0,0,0, #horizontal load
-         0,0,0,18,0,0,0,0,0,0] #vertical load 
-         # yes the 25 is supposed to be positive
-    data_dict = {"C": Cm,
-                "Sx": Sx,
-                "Sy": Sy,
-                "X": Xm,
-                "Y": Ym,
-                "L": Lm}
-    sio.savemat("design1.mat",data_dict)
-def generate_design_two():
-    # Data file will have C,Sx,Sy,X,Y,L
-    Cm = np.array([
-        #1,2,3,4,5,6,7,8,9,A,B,C,D,E,F truss/joint 
-        [1,0,0,0,0,1,0,0,0,0,0,0,0,0,0], # A
-        [1,1,0,0,0,0,1,0,0,0,0,0,0,0,0], # B
-        [0,1,1,0,0,0,0,1,1,0,0,0,0,0,0], # C
-        [0,0,1,1,0,0,0,0,0,1,1,0,0,0,0], # D
-        [0,0,0,1,1,0,0,0,0,0,0,1,0,0,0], # E
-        [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0], # F
-        [0,0,0,0,0,0,0,0,0,0,1,1,1,0,1], # G
-        [0,0,0,0,0,0,0,0,1,1,0,0,0,1,1], # H
-        [0,0,0,0,0,1,1,1,0,0,0,0,0,1,0] # I
-    ])
-    Sx = np.array([
-        #Ax,Ay,Hy
-        [1,0,0], # A
-        [0,0,0], # B
-        [0,0,0], # C
-        [0,0,0], # D
-        [0,0,0], # E
-        [0,0,0], # F
-        [0,0,0], # G
-        [0,0,0], # H
-        [0,0,0] # I
 
-    ])
-    Sy = np.array([
-        #Ax,Ay,Hy
-        [0,1,0], # A
-        [0,0,0], # B
-        [0,0,0], # C
-        [0,0,0], # D
-        [0,0,0], # E
-        [0,0,1], # F
-        [0,0,0], # G
-        [0,0,0], # H
-        [0,0,0] # I
-
-    ])
-    # assuming origin at point A 
-    #     A, B, C, D, E, F, G, H, I,
-    Xm = [ 0, 6,12,30,36,42,33,21, 9]
-    Ym = [00,00,00,00,00,00, 5.196, 15.589, 5.196]
-    #     A,B,C,D,E,F,G,H,I
-    Lm = [0,0,0,0,0,0,0,0,0, #horizontal load
-         0,0,0,2,0,0,0,0,0] #vertical load 
-         # yes the 25 is supposed to be positive
-    data_dict = {"C": Cm,
-                "Sx": Sx,
-                "Sy": Sy,
-                "X": Xm,
-                "Y": Ym,
-                "L": Lm}
-    sio.savemat("design2.mat",data_dict)
-def generate_final_design():
     # Data file will have C,Sx,Sy,X,Y,L
     Cm = np.array([
         #1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H truss/joint 
@@ -349,7 +240,7 @@ def run(file_name):
     
     print("Cost of truss: $" + str(total_cost))
     print("Theoretical max load/cost ratio in oz/$: " + str(total_load/total_cost))
-    
+
 #generate_validation_data()
 #generate_validation_data()
 generate_final_design()
