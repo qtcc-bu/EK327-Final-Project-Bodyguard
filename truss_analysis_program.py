@@ -2,61 +2,13 @@ import matplotlib.pyplot as plt
 import scipy.io as sio
 import numpy as np
 import math
+from coordinate import get_distance
 from truss import Truss 
 
 EPSILON = 1.0E-7
 TRUSS_COST_P_IN = 1
 JOINT_COST = 10
 def generate_validation_data():
-    # Data file will have C,Sx,Sy,X,Y,L
-    Cm = np.array([
-        #1,2,3,4,5,6,7,8,9,A,B,C,D truss/joint 
-        [1,1,0,0,0,0,0,0,0,0,0,0,0], # A
-        [1,0,1,1,0,0,0,0,0,0,0,0,0], # B
-        [0,0,0,1,1,1,0,0,0,0,0,0,0], # C
-        [0,1,1,0,1,0,1,1,0,0,0,0,0], # D
-        [0,0,0,0,0,1,1,0,1,1,0,0,0], # E
-        [0,0,0,0,0,0,0,1,1,0,1,1,0], # F
-        [0,0,0,0,0,0,0,0,0,1,1,0,1], # G
-        [0,0,0,0,0,0,0,0,0,0,0,1,1]  # H
-    ])
-    Sx = np.array([
-        #Ax,Ay,Hy
-        [1,0,0],
-        [0,0,0],
-        [0,0,0],
-        [0,0,0],
-        [0,0,0],
-        [0,0,0],
-        [0,0,0],
-        [0,0,0],
-    ])
-    Sy = np.array([
-        #Ax,Ay,Hy
-        [0,1,0],
-        [0,0,0],
-        [0,0,0],
-        [0,0,0],
-        [0,0,0],
-        [0,0,0],
-        [0,0,0],
-        [0,0,1],
-    ])
-    # assuming origin at point A 
-    #    A,B,C,D,E,F,G,H
-    Xm = [0,0,4,4,8,8,12,12]
-    Ym = [0,4,8,4,8,4,4,0]
-    #    A,B,C,D,E,F,G,H
-    Lm = [0,0,0,0,0,0,0,0, #horizontal load
-         0,0,0,25,0,0,0,0] #vertical load 
-         # yes the 25 is supposed to be positive
-    data_dict = {"C": Cm,
-                "Sx": Sx,
-                "Sy": Sy,
-                "X": Xm,
-                "Y": Ym,
-                "L": Lm}
-    sio.savemat("validationproblem.mat",data_dict)
 
     # Data file will have C,Sx,Sy,X,Y,L
     Cm = np.array([
@@ -118,9 +70,52 @@ def generate_validation_data():
                 "Y": Ym,
                 "L": Lm}
     sio.savemat("final.mat",data_dict)
-def read_data(file_name):
+def convert_truss_to_matrix(truss:Truss):
+    if not truss.is_valid():
+        print('Truss is not valid!')
+        return 0
+    # Generates C matrix 
+    Cm = np.zeros((truss.get_number_joints(),truss.get_number_members()))
+    for i,member in enumerate(truss.member_list):
+        for j,joint in enumerate(truss.joint_list):
+            if (get_distance(member.coordinate1,joint.coordinate)==0) or (get_distance(member.coordinate2,joint.coordinate)==0):
+                Cm[j][i] = 1
+    # Generates Sx and Sy matrices
+    Sx = np.zeroes((truss.get_number_joints(),3))
+    Sy = np.zeroes((truss.get_number_joints(),3))
+    for i, joint in enumerate(truss.joint_list):
+        if(joint.support==1):
+            Sx[i][0] = 1
+            Sy[i][1] = 1
+        if(joint.support==2):
+            Sy[i][2] = 1
+    # Generates Xm and Ym lists
+    Xm = np.zeroes(truss.get_number_joints())
+    Ym = np.zeroes(truss.get_number_joints())
+    for index, joint in enumerate(truss.joint_list):
+        Xm[index] = joint.coordinate.x_coord
+        Ym[index] = joint.coordinate.y_coord
+    # Generates load list
+    Lxm = np.zeroes(truss.get_number_joints())
+    Lym = np.zeroes(truss.get_number_joints())
+    for index, joint in enumerate(truss.joint_list):
+        Xm[index] = joint.x_load
+        Ym[index] = joint.y_load
+    # I know I could do those two loops in one go but 
+    # this makes the code more readable and it's all 
+    # happening in user real time anyone (hopefully)
+    Lm = np.append(Lxm,Lym)
+    data_dict = {"C": Cm,
+                "Sx": Sx,
+                "Sy": Sy,
+                "X": Xm,
+                "Y": Ym,
+                "L": Lm}
+    return data_dict
+def read_data(dict_name):
+
     # Data file will have C,Sx,Sy,X,Y,L
-    tempmat = sio.loadmat(file_name)
+    tempmat = dict_name
     C = tempmat["C"]
     Sx = tempmat["Sx"]
     Sy = tempmat["Sy"]
@@ -128,8 +123,8 @@ def read_data(file_name):
     Y = tempmat["Y"]
     L = tempmat["L"]
     return C,Sx,Sy,X,Y,L
-def analyze_system(file_name):
-    C,Sx,Sy,X,Y,L = read_data(file_name)
+def analyze_system(truss:Truss):
+    C,Sx,Sy,X,Y,L = read_data(convert_truss_to_matrix(truss))
     X = X[0]
     Y = Y[0]
     A_x_half = C.astype(float)
@@ -177,47 +172,25 @@ def analyze_system(file_name):
             T[i]=0
         i=i+1
     return T
-def get_cost(file_name):
-    C,Sx,Sy,X,Y,L = read_data(file_name)
-    X = X[0]
-    Y = Y[0]
-    # Calculates the cost from trusses
-    trusses_cost = int(0)
-    for column in C.T:
-        index = 0
-        pos1 = 0
-        pos2 = 0
-        # grabs coordinate index of the column
-        while(index<len(column)):
-            if (column[index]==1 and pos1==0):
-                pos1 = index
-            elif (column[index]==1):
-                pos2 = index
-            index=index+1
-        # reuses pos1 and pos2 for exact coordinates
-        x1 = X[pos1]
-        y1 = Y[pos1]
-        x2 = X[pos2]
-        y2 = Y[pos2]
-        distance = (math.sqrt(((x2-x1)**2)+((y2-y1)**2)))
-        trusses_cost+=distance*TRUSS_COST_P_IN
-    
-    # Calculates Joint Cost 
-    joint_number = len(C.T[0])
-    joint_cost = joint_number*JOINT_COST
-
-    #returns total cost
-    return joint_cost+trusses_cost
-def run(file_name):
+def get_cost(truss:Truss):
+    cost = 0
+    cost += truss.joint_list.size*JOINT_COST
+    for member in truss.member_list:
+        cost+=member.get_length()*TRUSS_COST_P_IN
+    return cost
+def run(truss:Truss):
     # Prints the load uWu
-    C,Sx,Sy,X,Y,L = read_data(file_name)
-    total_load = int(0)
-    for element in L[0]:
-        total_load+=int(element)
-    print("EK301, A4, Group?: Quentin C, Alejandro R, Dongwoo K")
+    #C,Sx,Sy,X,Y,L = read_data(file_name)
+    total_load = 0
+    for joint in truss.joint_list:
+        total_load+=(joint.x_load + joint.y_load)
+    #total_load = int(0)
+    #for element in L[0]:
+    #    total_load+=int(element)
+    print("EK327 Bodyguard Team Project")
     print("Load: " + str(total_load) + " oz")
     # Prints the members and stuff
-    T = analyze_system(file_name)
+    T = analyze_system(truss)
     print("Member forces in oz:")
     i = 0
     while(i<len(T)-3):
@@ -236,15 +209,8 @@ def run(file_name):
     i=i+1
     print("Sy2: " + str(T[i]))
 
-    total_cost = get_cost(file_name)
+    total_cost = get_cost(truss)
     
     print("Cost of truss: $" + str(total_cost))
     print("Theoretical max load/cost ratio in oz/$: " + str(total_load/total_cost))
 
-#generate_validation_data()
-#generate_validation_data()
-generate_final_design()
-#generate_design_two()
-run("final.mat")
-#run("design2.mat")
-#run("validationproblem.mat")

@@ -6,10 +6,25 @@ class Truss:
         self.filename = filename
         self.joint_list = joint_list
         self.member_list = member_list
-    def add_member(self,id:int,coordinate1:Coordinate,coordinate2:Coordinate):
-        self.member_list.append(Member(id,coordinate1,coordinate2))
-    def add_joint(self,id:int,coordinate:Coordinate):
-        self.joint_list.append(Joint(id,coordinate))
+    def add_member(self,member:Member):
+        self.member_list.append(member)
+    def add_member(self,coordinate1:Coordinate,coordinate2:Coordinate):
+        self.add_member(Member(self.member_list.size+1,coordinate1,coordinate2))
+    def add_joint(self,joint:Joint):
+        self.joint_list.append(joint)
+    def add_joint(self,coordinate:Coordinate):
+        self.add_joint(Joint(self.joint_list.size+1,coordinate))
+    def delete_member(self,id:int):
+        # Removes member with given id, which will be at
+        # the id-1 index in the list 
+        self.member_list.pop(id-1)
+        # needed to preserve ID integrity 
+        self.reassign_member_ids()
+    def delete_joint(self,id:int):
+        # same logic as with delete_member
+        self.joint_list.pop(id-1)
+        # needed to preserve ID integrity
+        self.reassign_joint_ids()
     def get_number_members(self):
         return self.member_list.size
     def get_number_joints(self):
@@ -29,3 +44,9 @@ class Truss:
                 valid = False
                 break
         return valid
+    def reassign_joint_ids(self):
+        for count,joint in enumerate(self.joint_list):
+            joint.id = count
+    def reassign_member_ids(self):
+        for count,member in enumerate(self.member_list):
+            member.id = count
