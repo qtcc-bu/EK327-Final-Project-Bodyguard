@@ -8,12 +8,8 @@ class Truss:
         self.member_list = member_list
     def add_member(self,member:Member):
         self.member_list.append(member)
-    def add_member(self,coordinate1:Coordinate,coordinate2:Coordinate):
-        self.add_member(Member(self.member_list.size+1,coordinate1,coordinate2))
     def add_joint(self,joint:Joint):
         self.joint_list.append(joint)
-    def add_joint(self,coordinate:Coordinate):
-        self.add_joint(Joint(self.joint_list.size+1,coordinate))
     def delete_member(self,id:int):
         # Removes member with given id, which will be at
         # the id-1 index in the list 
@@ -26,9 +22,9 @@ class Truss:
         # needed to preserve ID integrity
         self.reassign_joint_ids()
     def get_number_members(self):
-        return self.member_list.size
+        return len(self.member_list)
     def get_number_joints(self):
-        return self.joint_list.size
+        return len(self.joint_list)
     def is_valid(self):
         valid = True
         for member in self.member_list:

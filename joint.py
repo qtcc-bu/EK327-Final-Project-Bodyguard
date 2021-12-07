@@ -1,6 +1,6 @@
 import coordinate
 class Joint:
-    def _init_(self,id:int,coordinate:coordinate.Coordinate,x_load:float=0,y_load:float=0,support:int=0):
+    def __init__(self,id:int,coordinate:coordinate.Coordinate,x_load:float=0,y_load:float=0,support:int=0):
         self.id = id
         self.coordinate = coordinate
         self.x_load = x_load
