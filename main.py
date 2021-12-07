@@ -54,9 +54,32 @@ def main():
                 knowssupport=True
             else:
                 print("You can only input 0 1 or 2!!\n")
+        
+        #Xload
+        knowxload=False
+        while(knowxload==False):
+            xload=input("What is the horizintal load on this joint?")
+            knowxload=True
+            try:
+                float(xload)
+            except ValueError:
+                print("Load must be a number!!")
+                knowxload=False
+
+        #Yload
+        knowyload=False
+        while(knowyload==False):
+            yload=input("What is the Verticle load on this joint?")
+            knowyload=True
+            try:
+                float(yload)
+            except ValueError:
+                print("Load must be a number!!")
+                knowyload=False
+
 
         ##adds joint to joint list
-        jointlist.append(Joint(id=i+1,coordinate=Coordinate(x,y),support=s))
+        jointlist.append(Joint(id=i+1,coordinate=Coordinate(x,y),support=s,x_load=xload,y_load=yload))
     
 
     #second we make them input the members
@@ -108,6 +131,8 @@ def main():
                     print("First joint and second joint can't be the same!")
                 else:
                      hassecond=True
+        memberlist.append(Member(id=i+1,coordinate1=Joint.get_joint_location(jid1),coordinate2=Joint.get_joint_location(jid2)))
+        3
 
 
         
