@@ -131,8 +131,8 @@ def main():
                     print("First joint and second joint can't be the same!")
                 else:
                      hassecond=True
-        memberlist.append(Member(id=i+1,coordinate1=Joint.get_joint_location(jid1),coordinate2=Joint.get_joint_location(jid2)))
-        3
+        memberlist.append(Member(id=i+1,coordinate1=jointlist[int(jid1)-1].get_joint_location(),coordinate2=jointlist[int(jid2)-1].get_joint_location()))
+        
 
 
         
