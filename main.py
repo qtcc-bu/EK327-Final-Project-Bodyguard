@@ -192,7 +192,7 @@ def main():
     while(ison):
             display(thetruss)
             #list  options
-            print("input 'M' for adding a member, 'N' for deleting a member, 'J' for adding a Joint, 'H' for deleting a joint:  ")
+            print("input 'M' for adding a member, 'N' for deleting a member, 'J' for adding a Joint, 'H' for deleting a joint, 'V' for viewing information on truss:  ")
 
             #input options
             option=input("Select option number: ")
@@ -203,6 +203,12 @@ def main():
             #quit
             if(option=="Q"):
                 ison=False
+                
+            elif(option=="V"):
+                #totalcost = get_cost(thetruss)
+                #print("Cost of Truss: $" + str(totalcost))
+                run(thetruss)
+                
             #add member to truss
             elif(option=="M"):
                 print("Member ",len(thetruss.member_list)+1)
