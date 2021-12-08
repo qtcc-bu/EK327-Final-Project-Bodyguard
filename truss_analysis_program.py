@@ -253,24 +253,24 @@ def run(truss:Truss):
     #print("EK327 Bodyguard Team Project")
     print("Load: " + str(total_load) + " oz")
     # Prints the members and stuff
-    #T = analyze_system(truss)
-    #print("Member forces in oz:")
-    #i = 0
-    #while(i<len(T)-3):
-    #    comptomp = ""
-    #    if (T[i]<0):
-    #        comptomp = "C"
-    #    else:
-    #        comptomp = "T"
-    #    print("m"+str(i+1)+": "+str(abs(T[i]))+" "+comptomp)
-    #    i=i+1
+    T = analyze_system(truss)
+    print("Member forces in oz:")
+    i = 0
+    while(i<len(T)-3):
+        comptomp = ""
+        if (T[i]<0):
+            comptomp = "C"
+        else:
+            comptomp = "T"
+        print("m"+str(i+1)+": "+str(abs(T[i]))+" "+comptomp)
+        i=i+1
                 #i=i+1
-    #print("Reaction forces in oz:")
-    #print("Sx1: " + str(T[i]))
-    #i=i+1
-    #print("Sy1: " + str(T[i]))
-    #i=i+1
-    #print("Sy2: " + str(T[i]))
+    print("Reaction forces in oz:")
+    print("Sx1: " + str(T[i]))
+    i=i+1
+    print("Sy1: " + str(T[i]))
+    i=i+1
+    print("Sy2: " + str(T[i]))
 
     total_cost = get_cost(truss)
 

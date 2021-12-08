@@ -6,7 +6,7 @@ from coordinate import Coordinate, get_distance
 from member import Member
 from truss import Truss 
 from joint import Joint
-
+from truss_analysis_program import run
 
 #displays 
 def display(truss:Truss):
@@ -98,7 +98,7 @@ def main():
                 knowssupport=True
             else:
                 print("You can only input 0 1 or 2!!\n")
-        
+        s = int(s)
         #Xload
         knowxload=False
         while(knowxload==False):
