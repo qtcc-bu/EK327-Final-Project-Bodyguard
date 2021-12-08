@@ -8,6 +8,15 @@ from truss import Truss
 from joint import Joint
 
 
+#displays
+def display(truss:Truss):
+    for i in truss.joint_list:
+        plt.plot(i.coordinate.x_coord,i.coordinate.y_coord,'bo')
+    
+    for i in truss.member_list:
+        plt.plot([i.coordinate1.x_coord, i.coordinate2.x_coord],[i.coordinate1.y_coord,i.coordinate2.y_coord],'r')
+    plt.show()
+
 ##NOTe WELL!! Id is index+1 for joint list and memberlist
 
 def main():
@@ -58,7 +67,7 @@ def main():
         #Xload
         knowxload=False
         while(knowxload==False):
-            xload=input("What is the horizintal load on this joint?")
+            xload=input("What is the horizontal load on this joint?")
             knowxload=True
             try:
                 float(xload)
@@ -69,7 +78,7 @@ def main():
         #Yload
         knowyload=False
         while(knowyload==False):
-            yload=input("What is the Verticle load on this joint?")
+            yload=input("What is the verticle load on this joint?")
             knowyload=True
             try:
                 float(yload)
@@ -130,13 +139,39 @@ def main():
                 elif(jid1==jid2):
                     print("First joint and second joint can't be the same!")
                 else:
-                     hassecond=True
+                    hassecond=True
+
+            #add member list
         memberlist.append(Member(id=i+1,coordinate1=jointlist[int(jid1)-1].get_joint_location(),coordinate2=jointlist[int(jid2)-1].get_joint_location()))
-        
 
 
-        
+###saves truss
+    file=input("What would you like the truss name to be(may save over if repeated name)")
+    thetruss=Truss(filename=file,joint_list=jointlist,member_list=memberlist) 
 
+    display(thetruss)
 
+    ison=True
+    while(ison):
+            #list  options
+            print()
 
+            #input options
+            option=input("Select option number: ")
+            option=option.upper()
+            
+            #execute given option
+            if(option=="Q"):
+                ison=False
+
+            display(thetruss)
 main()
+ 
+   
+
+
+
+
+
+
+        
