@@ -8,13 +8,20 @@ from truss import Truss
 from joint import Joint
 
 
-#displays
+#displays but doesnt work
 def display(truss:Truss):
+    jx=np.array([])
+    jy=np.array([])
     for i in truss.joint_list:
-        plt.plot(i.coordinate.x_coord,i.coordinate.y_coord,'bo')
+        jx=np.append(jx,int(i.coordinate.x_coord))
+        jy=np.append(jy,int(i.coordinate.y_coord))
+    print(jx)
+    print(jy)
+
+    plt.scatter(jx,jy)
     
     for i in truss.member_list:
-        plt.plot([i.coordinate1.x_coord, i.coordinate2.x_coord],[i.coordinate1.y_coord,i.coordinate2.y_coord],'r')
+       plt.plot([int(i.coordinate1.x_coord), int(i.coordinate2.x_coord)],[int(i.coordinate1.y_coord), int(i.coordinate2.y_coord)] , 'g')
     plt.show()
 
 ##NOTe WELL!! Id is index+1 for joint list and memberlist
@@ -59,7 +66,14 @@ def main():
         knowssupport=False
         while (knowssupport==False) :
             s=input("If joint Has no support, type '0', if joint has pin support, type '1', and if joint has roller support, type '2' ")
-            if(int(s)==0 or int(s)==1 or int(s)==2):
+            is_int=True
+            try:
+                int(s)
+            except ValueError:
+                is_int=False
+            if(is_int==False):
+                print("You can only input 0 1 or 2!\n")
+            elif(int(s)==0 or int(s)==1 or int(s)==2):
                 knowssupport=True
             else:
                 print("You can only input 0 1 or 2!!\n")
@@ -149,12 +163,13 @@ def main():
     file=input("What would you like the truss name to be(may save over if repeated name)")
     thetruss=Truss(filename=file,joint_list=jointlist,member_list=memberlist) 
 
-    display(thetruss)
+    
 
     ison=True
     while(ison):
+            display(thetruss)
             #list  options
-            print()
+            print("input 'A' for adding a ")
 
             #input options
             option=input("Select option number: ")
@@ -164,7 +179,7 @@ def main():
             if(option=="Q"):
                 ison=False
 
-            display(thetruss)
+            
 main()
  
    
