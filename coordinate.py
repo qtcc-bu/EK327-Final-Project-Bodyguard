@@ -9,4 +9,8 @@ class Coordinate:
 def get_distance(coord1:Coordinate,coord2:Coordinate):
     x1,y1 = coord1.get_coordinate()
     x2,y2 = coord2.get_coordinate()
+    x1 = float(x1)
+    x2 = float(x2)
+    y1 = float(y1)
+    y2 = float(y2)
     return math.sqrt(math.pow((x2-x1),2)+math.pow((y2-y1),2))

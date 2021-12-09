@@ -237,20 +237,24 @@ def get_cost(truss:Truss):
         cost+=member.get_length()*TRUSS_COST_P_IN
     return cost
 def run(truss:Truss):
+
+                #code indented three tabs were already commented amount
+                #code commented out without tabs are having issues with matrix size
+
     # Prints the load uWu
-    #C,Sx,Sy,X,Y,L = read_data(file_name)
-    print(type(truss))
+                #C,Sx,Sy,X,Y,L = read_data(file_name)
+    #print(type(truss))
     total_load = 0
     for joint in truss.joint_list:
-        total_load+=(joint.x_load + joint.y_load)
-    #total_load = int(0)
-    #for element in L[0]:
-    #    total_load+=int(element)
-    print("EK327 Bodyguard Team Project")
+        total_load+=(float(joint.x_load) + float(joint.y_load))
+                #total_load = int(0)
+                #for element in L[0]:
+                #    total_load+=int(element)
+    #print("EK327 Bodyguard Team Project")
     print("Load: " + str(total_load) + " oz")
     # Prints the members and stuff
     T = analyze_system(truss)
-    print("Member forces in oz:")
+    print("MEMBER FORCES:\n**C indicates that member is in compression, T indicates that member is in tension.")
     i = 0
     while(i<len(T)-3):
         comptomp = ""
@@ -260,8 +264,8 @@ def run(truss:Truss):
             comptomp = "T"
         print("m"+str(i+1)+": "+str(abs(T[i]))+" "+comptomp)
         i=i+1
-    #i=i+1
-    print("Reaction forces in oz:")
+                #i=i+1
+    print("Reaction forces:")
     print("Sx1: " + str(T[i]))
     i=i+1
     print("Sy1: " + str(T[i]))
@@ -269,12 +273,12 @@ def run(truss:Truss):
     print("Sy2: " + str(T[i]))
 
     total_cost = get_cost(truss)
-    
+
     print("Cost of truss: $" + str(total_cost))
-    print("Theoretical max load/cost ratio in oz/$: " + str(total_load/total_cost))
+    print("Theoretical max load/cost ratio in force/$: " + str(total_load/total_cost))
 
 def test():
     stuff = convert_matrix_to_truss('final.mat')
     run(stuff)
-generate_validation_data()
-test()
+#generate_validation_data()
+#test()
