@@ -184,6 +184,7 @@ def main():
 
 ###saves truss
     file=input("\nWhat would you like the truss name to be (may save over if repeated name): ")
+    print("Saving truss...")
     thetruss=Truss(filename=file,joint_list=jointlist,member_list=memberlist) 
 
     #Options menu
