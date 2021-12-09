@@ -48,6 +48,10 @@ def display(truss:Truss):
 ##NOTe WELL!! Id is index+1 for joint list and memberlist
 
 def main():
+    ##Program header
+    print("\nT R U S S   A N A L Y S I S\nQuentin Clark, Sebastian Gangemi, Dixon Rand, Robert D'Antonio\nEC327 Fall 2021\n\n")
+
+
     ##first we input the jpints
     hasjointamount=False
     jointlist=[]
@@ -191,7 +195,7 @@ def main():
     ison=True
     while(ison):
             #list  options
-            print("\n\nOPTIONS:\n'D' to display truss (NOTE: truss window will have to be closed to continue)\n'M' for adding a member\n'N' for deleting a member\n'J' for adding a Joint\n'H' for deleting a joint\n'V' for viewing information on truss\n'Q' to quit program\n")
+            print("\n\nOPTIONS:\n'D' to display truss (NOTE: truss window will have to be closed before continuing)\n'M' for adding a member\n'N' for deleting a member\n'J' for adding a Joint\n'H' for deleting a joint\n'V' for viewing information on truss\n'Q' to quit program\n")
 
             #input options
             option=input("Enter input: ")
@@ -211,6 +215,7 @@ def main():
                 #totalcost = get_cost(thetruss)
                 #print("Cost of Truss: $" + str(totalcost))
                 run(thetruss)
+                input("Press ENTER to continue")
                 
             #add member to truss
             elif(option=="M"):
@@ -251,7 +256,7 @@ def main():
 
                 #adds member to jointlist of truss
                 thetruss.add_member(Member(id=len(thetruss.member_list)+1,coordinate1=thetruss.joint_list[int(jid1)-1].coordinate,coordinate2=thetruss.joint_list[int(jid2)-1].coordinate))
-
+                input("New member successfully added. Press ENTER to continue")
 
             #adds joints
             elif(option=='J'):
@@ -313,13 +318,13 @@ def main():
                         print("Load must be a number!")
                         knowyload=False
                 thetruss.add_joint(Joint(id=len(thetruss.joint_list)+1,coordinate=Coordinate(x_coord=float(xin),y_coord=yin),support=sup,x_load=xload,y_load=yload))
-
+                input("New joint successfully added. Press ENTER to continue")
                 #deletes Member with error checking
             elif(option=="N"):
                 hasid=False
                 isint=False
                 while(hasid==False):
-                    id=input("What is the ID of the member which would would like to delete?")
+                    id=input("What is the ID of the member which would would like to delete? ")
                     isint=True
                     try:
                         int(id)
@@ -332,12 +337,13 @@ def main():
                         else:
                             hasid=True
                 thetruss.delete_member(int(id))
+                input("Member successfully deleted. Press ENTER to continue.")
             #deletes joint with error checking
             elif(option=="H"):
                 hasid=False
                 isint=False
                 while(hasid==False):
-                    id=input("What is the ID of the joint which would would like to delete?")
+                    id=input("What is the ID of the joint which would would like to delete? ")
                     isint=True
                     try:
                         int(id)
@@ -350,6 +356,7 @@ def main():
                         else:
                             hasid=True
                 thetruss.delete_joint(int(id))
+                input("Joint successfully deleted. Press ENTER to continue.")
 
 
 main()

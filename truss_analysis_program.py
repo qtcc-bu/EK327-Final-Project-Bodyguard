@@ -265,7 +265,7 @@ def run(truss:Truss):
         print("m"+str(i+1)+": "+str(abs(T[i]))+" "+comptomp)
         i=i+1
                 #i=i+1
-    print("Reaction forces in oz:")
+    print("Reaction forces:")
     print("Sx1: " + str(T[i]))
     i=i+1
     print("Sy1: " + str(T[i]))
@@ -275,7 +275,7 @@ def run(truss:Truss):
     total_cost = get_cost(truss)
 
     print("Cost of truss: $" + str(total_cost))
-    print("Theoretical max load/cost ratio in oz/$: " + str(total_load/total_cost))
+    print("Theoretical max load/cost ratio in force/$: " + str(total_load/total_cost))
 
 def test():
     stuff = convert_matrix_to_truss('final.mat')
