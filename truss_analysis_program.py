@@ -254,7 +254,7 @@ def run(truss:Truss):
     print("Load: " + str(total_load) + " oz")
     # Prints the members and stuff
     T = analyze_system(truss)
-    print("Member forces in oz:")
+    print("MEMBER FORCES:\n**C indicates that member is in compression, T indicates that member is in tension.")
     i = 0
     while(i<len(T)-3):
         comptomp = ""

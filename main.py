@@ -53,7 +53,7 @@ def main():
     jointlist=[]
 ##finds out joint amount with error checking
     while(hasjointamount==False):
-        num=input("How many Joints are there?  :")
+        num=input("Enter number of joints: ")
         if(num.isnumeric()==False):
               print("You must enter an integer!\n")
         else:
@@ -61,11 +61,11 @@ def main():
 
 ##gets cordinate for each joint with error checking
     for i in range(int(num)):
-        print("Joint ",i+1)
+        print("\nJOINT ",i+1)
 
         hasx=False
         while(hasx==False):
-            x=input("What is x cord?  :")
+            x=input("Enter x coordinate: ")
             hasx=True
             try:
                 float(x)
@@ -75,7 +75,7 @@ def main():
 
         hasy=False
         while(hasy==False):
-            y=input("What is y cord?  :")
+            y=input("Enter y coordinate: ")
             hasy=True
             try:
                 float(y)
@@ -86,39 +86,39 @@ def main():
         ##Checks what support type the joint is
         knowssupport=False
         while (knowssupport==False) :
-            s=input("If joint Has no support, type '0', if joint has pin support, type '1', and if joint has roller support, type '2' ")
+            s=input("If joint Has no support, enter '0', if joint has pin support, enter '1', and if joint has roller support, enter '2': ")
             is_int=True
             try:
                 int(s)
             except ValueError:
                 is_int=False
             if(is_int==False):
-                print("You can only input 0 1 or 2!\n")
+                print("You can only input 0, 1, or 2!\n")
             elif(int(s)==0 or int(s)==1 or int(s)==2):
                 knowssupport=True
             else:
-                print("You can only input 0 1 or 2!!\n")
+                print("You can only input 0, 1, or 2!!\n")
         s = int(s)
         #Xload
         knowxload=False
         while(knowxload==False):
-            xload=input("What is the horizontal load on this joint?")
+            xload=input("Enter horizontal load on this joint (Note that a negative input indicates a rightward force): ")
             knowxload=True
             try:
                 float(xload)
             except ValueError:
-                print("Load must be a number!!")
+                print("Load must be a number!")
                 knowxload=False
 
         #Yload
         knowyload=False
         while(knowyload==False):
-            yload=input("What is the verticle load on this joint?")
+            yload=input("Enter vertical load on this joint (Note that a negative input indicates an upward force): ")
             knowyload=True
             try:
                 float(yload)
             except ValueError:
-                print("Load must be a number!!")
+                print("Load must be a number!")
                 knowyload=False
 
 
@@ -132,31 +132,31 @@ def main():
     memberlist=[]
     
     while(hasmemberamount==False):
-        mem=input("How many members are there?  :")
+        mem=input("\nEnter total number of members: ")
         if(mem.isnumeric()==False):
               print("You must enter an integer!\n")
         elif((int(num)==0 or int(num==1)) and int(mem)>0):
-            print("too many members for joints!")
+            print("Too many members for joints!")
         else:
             hasmemberamount=True
 
 
     #adds coordinates of member byjoint ids
     for i in range(int(mem)):
-        print("Member ",i+1)
+        print("\nMEMBER ",i+1)
         hasfirst=False
         #gets id of first joint with error check that is int and is one of joints
         while(hasfirst==False):
             is_int=True
-            jid1=input("What is the id of the first joint it is connected to?")
+            jid1=input("What is the ID of the first joint it is connected to? ")
             try:
                 int(jid1)
             except ValueError:
-                print("Must be int!")
+                print("Must be an integer!")
                 is_int=False
             if(is_int):
                 if((int(jid1)>0 and int(jid1)<=int(num))==False):
-                    print("Id must be in range of total amount of joints")
+                    print("ID must be in range of total amount of joints.")
                 else:
                      hasfirst=True
 
@@ -164,15 +164,15 @@ def main():
         hassecond=False
         while(hassecond==False):
             is_int=True
-            jid2=input("What is the id of the second joint it is connected to?")
+            jid2=input("What is the ID of the second joint it is connected to? ")
             try:
                 int(jid2)
             except ValueError:
-                print("Must be int!")
+                print("Must be an integer!")
                 is_int=False
             if(is_int):
                 if((int(jid2)>0 and int(jid2)<=int(num))==False):
-                    print("Id must be in range of total amount of joints")
+                    print("ID must be in range of total amount of joints.")
                 elif(jid1==jid2):
                     print("First joint and second joint can't be the same!")
                 else:
@@ -183,19 +183,17 @@ def main():
 
 
 ###saves truss
-    file=input("What would you like the truss name to be(may save over if repeated name)")
+    file=input("\nWhat would you like the truss name to be (may save over if repeated name): ")
     thetruss=Truss(filename=file,joint_list=jointlist,member_list=memberlist) 
 
-    
-
+    #Options menu
     ison=True
     while(ison):
-            display(thetruss)
             #list  options
-            print("input 'M' for adding a member, 'N' for deleting a member, 'J' for adding a Joint, 'H' for deleting a joint, 'V' for viewing information on truss:  ")
+            print("\n\nOPTIONS:\n'D' to display truss (NOTE: truss window will have to be closed to continue)\n'M' for adding a member\n'N' for deleting a member\n'J' for adding a Joint\n'H' for deleting a joint\n'V' for viewing information on truss\n'Q' to quit program\n")
 
             #input options
-            option=input("Select option number: ")
+            option=input("Enter input: ")
             option=option.upper()
             
             #execute given option
@@ -203,6 +201,10 @@ def main():
             #quit
             if(option=="Q"):
                 ison=False
+            
+            elif(option=="D"):
+                print("Displaying truss")
+                display(thetruss)
                 
             elif(option=="V"):
                 #totalcost = get_cost(thetruss)
@@ -216,15 +218,15 @@ def main():
                  #gets id of first joint with error check that is int and is one of joints
                 while(hasfirst==False):
                      is_int=True
-                     jid1=input("What is the id of the first joint it is connected to?")
+                     jid1=input("What is the ID of the first joint it is connected to? ")
                      try:
                         int(jid1)
                      except ValueError:
-                         print("Must be int!")
+                         print("Must be an integer")
                          is_int=False
                      if(is_int):
                              if((int(jid1)>0 and int(jid1)<=len(thetruss.joint_list))==False):
-                                print("Id must be in range of total amount of joints")
+                                print("ID must be in range of total amount of joints")
                              else:
                                  hasfirst=True
 
@@ -232,15 +234,15 @@ def main():
                 hassecond=False
                 while(hassecond==False):
                     is_int=True
-                    jid2=input("What is the id of the second joint it is connected to?")
+                    jid2=input("What is the ID of the second joint it is connected to?")
                     try:
                           int(jid2)
                     except ValueError:
-                         print("Must be int!")
+                         print("Must be an integer")
                          is_int=False
                     if(is_int):
                          if((int(jid2)>0 and int(jid2)<=len(thetruss.joint_list))==False):
-                              print("Id must be in range of total amount of joints")
+                              print("ID must be in range of total amount of joints")
                          elif(jid1==jid2):
                              print("First joint and second joint can't be the same!")
                          else:
@@ -256,28 +258,28 @@ def main():
                 #user inputs xcoord
                 hasx=False
                 while(hasx==False):
-                    xin=input("What is the x coord?:  ")
+                    xin=input("Enter x coordinate: ")
                     hasx=True
                     try:
                         float(xin)
                     except ValueError:
                         hasx=False
-                        print("Must be a number!!!")
+                        print("Must be a number!")
                 #user inputs y coord
                 hasy=False
                 while(hasy==False):
-                    yin=input("What is the y coord?:  ")
+                    yin=input("Enter y coordinate: ")
                     hasy=True
                     try:
                         float(yin)
                     except ValueError:
                         hasy=False
-                        print("Must be a number!!!")
+                        print("Must be a number!")
 
                 #user inputs support type
                 hassupport=False
                 while(hassupport==False):
-                    sup=input("If joint Has no support, type '0', if joint has pin support, type '1', and if joint has roller support, type '2' ") 
+                    sup=input("If joint Has no support, enter '0', if joint has pin support, enter '1', and if joint has roller support, enter '2': ") 
                     isint=True
                     try:
                         int(sup) 
@@ -287,27 +289,27 @@ def main():
                         if(int(sup)==0 or int(sup)==1 or int(sup)==2):
                             hassupport=True
                         else:
-                            print("Must be 0 1 or 2!!")       
+                            print("Must be 0, 1, or 2!!")       
                  #Xload
                 knowxload=False
                 while(knowxload==False):
-                    xload=input("What is the horizontal load on this joint?")
+                    xload=input("Enter horizontal load on this joint (Note that a negative input indicates a rightward force): ")
                     knowxload=True
                     try:
                         float(xload)
                     except ValueError:
-                        print("Load must be a number!!")
+                        print("Load must be a number!")
                         knowxload=False
 
                  #Yload
                 knowyload=False
                 while(knowyload==False):
-                    yload=input("What is the verticle load on this joint?")
+                    yload=input("Enter vertical load on this joint (Note that a negative input indicates an upward force): ")
                     knowyload=True
                     try:
                         float(yload)
                     except ValueError:
-                        print("Load must be a number!!")
+                        print("Load must be a number!")
                         knowyload=False
                 thetruss.add_joint(Joint(id=len(thetruss.joint_list)+1,coordinate=Coordinate(x_coord=float(xin),y_coord=yin),support=sup,x_load=xload,y_load=yload))
 
@@ -316,12 +318,12 @@ def main():
                 hasid=False
                 isint=False
                 while(hasid==False):
-                    id=input("What is the id of the member which would would like to delete?")
+                    id=input("What is the ID of the member which would would like to delete?")
                     isint=True
                     try:
                         int(id)
                     except ValueError:
-                        print("Must be an int")
+                        print("Must be an integer.")
                         isint=False
                     if(isint):
                         if((int(id)>0 and int(id)<=len(thetruss.member_list))==False):
@@ -334,12 +336,12 @@ def main():
                 hasid=False
                 isint=False
                 while(hasid==False):
-                    id=input("What is the id of the joint which would would like to delete?")
+                    id=input("What is the ID of the joint which would would like to delete?")
                     isint=True
                     try:
                         int(id)
                     except ValueError:
-                        print("Must be an int")
+                        print("Must be an integer")
                         isint=False
                     if(isint):
                         if((int(id)>0 and int(id)<=len(thetruss.joint_list))==False):
